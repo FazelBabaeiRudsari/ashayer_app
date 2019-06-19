@@ -92,11 +92,15 @@ class _MyAppState extends State<MyApp> {
 //      ),
       body: HomePage(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.school,
-        ),
-        onPressed: () {}
-      ),
+          child: Icon(
+            Icons.school,
+          ),
+          onPressed: () {
+            HomePage.of(context).initState();
+//            HomePage.of(context).build(context);
+//            Helper.createRows();
+            print("yes");
+          }),
     );
   }
 }
