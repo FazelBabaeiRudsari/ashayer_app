@@ -1,14 +1,8 @@
-import 'dart:io';
-
-import 'package:connecting/extra/newpage.dart';
-import 'package:connecting/model/school.dart';
-import 'package:flutter/material.dart';
-import 'package:connecting/helper/variables.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:path/path.dart';
+import 'package:connecting/helper/variables.dart';
+import 'package:connecting/model/school.dart';
+import 'package:http/http.dart' as http;
 
 class Helper {
   String _TOKEN = '';
@@ -153,61 +147,5 @@ class Helper {
       schools.add(s);
     }
     return schools;
-  }
-
-  static Widget _row(BuildContext context, School school) {
-    final _random = new Random();
-
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage("http://moj-raj.ir/img/school-" +
-            (1 + _random.nextInt(5)).toString() +
-            ".jpg"),
-      ),
-      title: Text(school.name),
-      subtitle: Text(school.schoolable_type),
-      onTap: () {
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => NewPage(school.name)));
-      },
-    );
-  }
-
-  static FutureBuilder createRows() {
-    return FutureBuilder(
-        future: Helper.getSchools(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return new Text(Variable.ERROR[Variable.DISCONNECTED]);
-            case ConnectionState.waiting:
-              return new Center(child: CircularProgressIndicator());
-            case ConnectionState.active:
-              return new Text('');
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return new Text(
-                  Variable.ERROR[Variable.DISCONNECTED],
-                  //  '${snapshot.error}',
-                  style: TextStyle(fontSize: 24.0, color: Colors.black),
-                );
-              }
-              if (snapshot.data == null) {
-                return Container(child: Center(child: Text("Loading...")));
-              } else {
-//            print("______" + snapshot.data);
-//                print("______________" + json.decode(snapshot.data).toString());
-                return ListView.builder(
-//              scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _row(context, snapshot.data[index]);
-                  },
-                );
-              }
-          }
-//    schools = await Helper.getSchools();
-//    return schools.map(_row).toList();
-        });
   }
 }

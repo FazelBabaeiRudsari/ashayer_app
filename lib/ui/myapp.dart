@@ -1,11 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:connecting/extra/layout.dart';
-import 'package:connecting/extra/homepage.dart';
+import 'package:connecting/helper/SchoolBloc.dart';
 import 'package:connecting/helper/helper.dart';
-import 'package:connecting/helper/variables.dart';
-import 'dart:convert';
-import 'package:connecting/model/school.dart';
-import 'package:connecting/extra/newpage.dart';
+import 'package:flutter/material.dart';
+
+import 'homepage.dart';
+
+//@immutable
+//class AppState {
+//  final command;
+//
+//  AppState(this.command);
+//}
+//
+//enum Actions { Refresh }
+//
+//AppState commander(AppState prev, action) {
+//  if (action == Actions.Refresh) {
+////    print(Variable.COMMAND_REFRESH_SCHOOLS);
+//    return AppState(Variable.COMMAND_REFRESH_SCHOOLS);
+//  }
+//  return prev;
+//}
 
 class MyApp extends StatefulWidget {
   @override
@@ -14,93 +28,76 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 //  Future<void> a = Helper.getToken();
+//  final store = Store(commander,
+//      initialState: AppState(Variable.COMMAND_REFRESH_SCHOOLS));
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+//  var schoolsBuilder = Helper.createRows();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.purple,
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            //TODO:
-          },
-        ),
-        title: Text("Madrese Ashayer"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
+    SchoolBloc bloc;
+    bloc ??= SchoolBloc();
+
+//    bloc.sink.add(Helper.getSchools());
+//    return StoreProvider<dynamic>(
+//      store: store,
+//      child: Scaffold(
+    return BlocProvider<SchoolBloc>(
+      bloc: bloc,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.purple,
+          leading: IconButton(
+            icon: Icon(Icons.menu),
             onPressed: () {
               //TODO:
             },
-          )
-        ],
-      ),
+          ),
+          title: Text("Madrese Ashayer"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                //TODO:
+              },
+            )
+          ],
+        ),
 //      drawer: Drawer(
-//        child: ListView(
-//          children: <Widget>[
-//            UserAccountsDrawerHeader(
-//              accountName: Text("Username"),
-//              accountEmail: Text("Email Adress"),
-//              currentAccountPicture: CircleAvatar(
-////              Image.asset("images/1.jpg"),
-//                backgroundColor:
-//                    Theme.of(context).platform == TargetPlatform.iOS
-//                        ? Colors.deepPurple
-//                        : Colors.white,
-//                child: Text("U N"),
-//              ),
-//              otherAccountsPictures: <Widget>[
-//                CircleAvatar(
-//                  backgroundColor:
-//                      Theme.of(context).platform == TargetPlatform.iOS
-//                          ? Colors.deepPurple
-//                          : Colors.white,
-//                  child: Text("2"),
-//                ),
-//              ],
-//            ),
-//            ListTile(
-//                title: Text("Page One"),
-//                trailing: Icon(Icons.arrow_upward),
-//                onTap: () {
-//                  Navigator.of(context).pop();
-//                  Navigator.of(context).pushNamed("/a");
-//                }),
-//            ListTile(
-//              title: Text("Page Two"),
-//              trailing: Icon(Icons.arrow_downward),
-//              onTap: () {
-//                Navigator.of(context).pop();
-//                Navigator.of(context).push(MaterialPageRoute(
-//                    builder: (BuildContext context) => NewPage("Page Two")));
-////                 Navigator.of(context).pushNamed("/b");
-//              },
-//            ),
-//            Divider(),
-//            ListTile(
-//              title: Text("Close"),
-//              trailing: Icon(Icons.close),
-//              onTap: () => Navigator.of(context).pop(),
-//            ),
-//            ListTile(
-//              title: Text("about as"),
-//              trailing: Icon(Icons.extension),
-//            ),
-//          ],
+//        body: StoreConnector(
+//          converter: (store) => store.state.command,
+//          builder: (context, commander) => HomePage(),
 //        ),
-//      ),
-      body: HomePage(),
-      floatingActionButton: FloatingActionButton(
+        body: HomePage(),
+
+        //
+//      floatingActionButton: StoreConnector(
+//        converter: (store) {
+//          return () => store.dispatch(Actions.Refresh);
+//        },
+//        builder: (context, callback) => FloatingActionButton(
+//            child: Icon(
+//              Icons.school,
+//            ),
+//            onPressed: callback),
+//      )
+//    )
+        floatingActionButton: FloatingActionButton(
           child: Icon(
             Icons.school,
           ),
-          onPressed: () {
-            HomePage.of(context).initState();
-//            HomePage.of(context).build(context);
-//            Helper.createRows();
-            print("yes");
-          }),
+          onPressed: () async {
+//            List<School> a = await Helper.getSchools();
+//            bloc.sink.add(await Future.delayed(const Duration(seconds: 3)));
+            bloc.sink.add(await Helper.getSchools());
+          },
+        ),
+      ),
     );
   }
 }

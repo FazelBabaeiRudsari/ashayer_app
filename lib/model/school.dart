@@ -1,6 +1,6 @@
-import 'package:connecting/model/hoozes.dart';
-import 'package:connecting/model/koochro.dart';
-import 'package:connecting/model/saabet.dart';
+import 'hoozes.dart';
+import 'koochro.dart';
+import 'saabet.dart';
 
 class School {
   int _id;

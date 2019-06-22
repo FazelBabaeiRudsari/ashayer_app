@@ -18,6 +18,9 @@ environment:
 
 dependencies:
   http: any
+  redux: any
+  flutter_redux: any
+  rxdart: any
   flutter:
     sdk: flutter
 
