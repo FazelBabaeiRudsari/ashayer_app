@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
 //  Future<void> a = Helper.getToken();
 //  final store = Store(commander,
 //      initialState: AppState(Variable.COMMAND_REFRESH_SCHOOLS));
+  BuildContext appContext;
 
   @override
   void dispose() {
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    appContext = context;
     SchoolBloc bloc;
     bloc ??= SchoolBloc();
 
@@ -73,7 +75,7 @@ class _MyAppState extends State<MyApp> {
 //          converter: (store) => store.state.command,
 //          builder: (context, commander) => HomePage(),
 //        ),
-        body: HomePage(),
+        body: HomePage(appContext, bloc),
 
         //
 //      floatingActionButton: StoreConnector(

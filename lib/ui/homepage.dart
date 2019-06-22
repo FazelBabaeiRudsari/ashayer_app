@@ -9,40 +9,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class HomePage extends StatefulWidget {
-//  HomePage() {
-//    this.commander = commander;
-//  }
+  final BuildContext appContext;
+  final SchoolBloc bloc;
+
+  HomePage(this.appContext, this.bloc);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(this.bloc);
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Future<List<School>> schools;
-  SchoolBloc bloc;
+  final SchoolBloc bloc;
 
-  @override
-  void dispose() {
-    super.dispose();
-    bloc.dispose();
-  }
+  _HomePageState(this.bloc);
 
   @override
   void initState() {
-    // TODO: implement initState
+    print("init");
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) => initData());
+    SchedulerBinding.instance.addPostFrameCallback((_) => refreshData());
   }
 
   @override
-  Widget build(BuildContext context) {
-    bloc = BlocProvider.of<SchoolBloc>(context);
+  void dispose() {
+    print("dispose");
+    super.dispose();
+    this.bloc.dispose();
+  }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    if (state == AppLifecycleState.resumed) {
+      //do your stuff
+    }
+  }
+
+  @override
+  Widget build(BuildContext appContext) {
     return StreamBuilder<List<School>>(
         stream: bloc.stream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext appContext, AsyncSnapshot snapshot) {
 //          print(bloc.stream);
-//          print(snapshot.connectionState);
+          print(snapshot.connectionState);
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return new Text(Variable.ERROR[Variable.DISCONNECTED]);
@@ -65,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return _row(context, snapshot.data[index]);
+                    return _row(appContext, snapshot.data[index]);
                   },
                 );
               }
@@ -73,7 +84,7 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  Widget _row(BuildContext context, School school) {
+  Widget _row(BuildContext appContext, School school) {
     final _random = new Random();
 
     return ListTile(
@@ -85,13 +96,20 @@ class _HomePageState extends State<HomePage> {
       title: Text(school.name),
       subtitle: Text(school.schoolable_type),
       onTap: () {
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => NewPage(school.name)));
+        Navigator.push(
+            appContext,
+            MaterialPageRoute(
+                maintainState: true,
+                builder: (context) {
+                  return NewPage(appContext, school.name);
+                }));
+//        refreshData();
       },
     );
   }
 
-  void initData() async {
+  void refreshData() async {
+//    print("refresh data");
     bloc.sink.add(await Helper.getSchools());
   }
 }
