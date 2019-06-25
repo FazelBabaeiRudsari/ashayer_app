@@ -5,6 +5,7 @@ import 'package:connecting/model/saabet.dart';
 class School {
   int _id;
   String _name;
+  dynamic _schoolable;
   int _province_id;
   int _schoolable_id;
   String _schoolable_type; //max=20
@@ -141,6 +142,12 @@ class School {
 
   set schoolable_type(String value) {
     _schoolable_type = value;
+  }
+
+  dynamic get schoolable => _schoolable;
+
+  set schoolable(dynamic value) {
+    _schoolable = value;
   }
 
   int get schoolable_id => _schoolable_id;

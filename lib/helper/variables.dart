@@ -8,10 +8,15 @@ class Variable {
   static String HOOZES = DOMAIN + "hoozes/";
   static String COMMAND_SCHOOLS = "schools";
   static String DISCONNECTED = "DISCONNECTED";
-
+  static String FAULT = "FAULT";
   static String token = "";
+
+
+
+
 
   static Map<String, String> ERROR = {
     "DISCONNECTED": "اتصال برقرار نیست",
+    "FAULT": "خطایی رخ داده",
   };
 }

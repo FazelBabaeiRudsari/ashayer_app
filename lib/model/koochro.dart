@@ -12,7 +12,20 @@ class Koochro {
   String _updated_at;
   String _created_at;
 
-  Koochro(this._id);
+  Koochro(
+    this._id,
+    this._type,
+    this._address_yeylagh,
+    this._loc_yeylagh,
+    this._fasele_az_shahrestan_yeylagh,
+    this._address_gheshlagh,
+    this._loc_gheshlagh,
+    this._fasele_az_shahrestan_gheshlagh,
+    this._masire_kooch,
+    this._masafate_kooch,
+    this._updated_at,
+    this._created_at,
+  );
 
   int get id => _id;
 

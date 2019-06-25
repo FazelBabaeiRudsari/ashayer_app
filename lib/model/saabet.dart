@@ -1,13 +1,15 @@
-class Saabet{
-
+class Saabet {
   int _id;
-  String _address;//max=150
-  String _loc;//max=50
+  String _address; //max=150
+  String _loc; //max=50
   int _fasele_az_shahrestan;
   String _updated_at;
   String _created_at;
 
-  Saabet(this._id);
+
+
+  Saabet(this._id, this._address, this._loc, this._fasele_az_shahrestan,
+      this._updated_at, this._created_at);
 
 
 
@@ -46,5 +48,4 @@ class Saabet{
   set address(String value) {
     _address = value;
   }
-
 }
