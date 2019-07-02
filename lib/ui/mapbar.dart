@@ -26,25 +26,14 @@ class MapBar extends StatelessWidget {
         backgroundColor: Colors.purple,
         title: Text("map"),
       ),
-      body: Column(
-        children: <Widget>[
-          new Expanded(
-                  child: new RefreshIndicator(
-                    child: new ListView(
-                      children: <Widget>[
-                        new Column(
-                          children: <Widget>[
-                            new Center(
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    onRefresh: refreshList,
-                    key: refreshKey,
-                  ),
+      body: Material(
+        child: new RefreshIndicator(
+          child: new ListView(
+            children: <Widget>[InkWell()],
           ),
-        ],
+          onRefresh: refreshList,
+          key: refreshKey,
+        ),
       ),
     );
 

@@ -1,8 +1,9 @@
 import 'package:connecting/ashghal/refresh.dart';
-import 'package:connecting/extra/mapbar.dart';
+import 'package:connecting/ui/mapbar.dart';
 import 'package:flutter/material.dart';
-import 'package:connecting/extra/homepage.dart';
+import 'package:connecting/ui/homepage.dart';
 import 'package:connecting/model/school.dart';
+import 'package:connecting/helper/SchoolBloc.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -10,21 +11,30 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+//
+//
 
-  Future<Null> refreshList() async {
-    refreshKey.currentState?.show(atTop: false);
-    await Future.delayed(Duration(seconds: 2));
 
-    //network call and setState so that view will render the new values
+  @override
+  void dispose() {
+    super.dispose();
   }
 
+//  var refreshKey = GlobalKey<RefreshIndicatorState>();
+//  Future<Null> refreshList() async {
+//    refreshKey.currentState?.show(atTop: false);
+//    await Future.delayed(Duration(seconds: 2));
+//  }
 //  Future<void> a = Helper.getToken();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: DefaultTabController(
+//    final SchoolBloc bloc=SchoolBloc();
+    final SchoolBloc bloc = SchoolBloc();
+
+    return BlocProvider<SchoolBloc>(
+        bloc: bloc,
+        child: DefaultTabController(
             length: 2,
             child: Scaffold(
               appBar: AppBar(
@@ -118,7 +128,7 @@ class _MyAppState extends State<MyApp> {
 
                     child: new TabBarView(
                       children: [
-                        HomePage(),
+                        HomePage(bloc),
                         MapBar("hello"),
                       ],
                     ),

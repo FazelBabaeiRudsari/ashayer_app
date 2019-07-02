@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:connecting/extra/formcard.dart';
-import 'package:connecting/extra/homepage.dart';
-import 'package:connecting/extra/newpage.dart';
+import 'package:connecting/ui/homepage.dart';
+import 'package:connecting/ui/newpage.dart';
 import 'package:connecting/model/koochro.dart';
 import 'package:connecting/model/saabet.dart';
 import 'package:connecting/model/school.dart';
@@ -9,10 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:connecting/helper/variables.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:math';
-import 'package:connecting/extra/secondpage.dart';
+import 'package:connecting/ui/secondpage.dart';
 import 'package:path/path.dart';
-import 'package:connecting/extra/my_flutter_app_icons.dart' as custicon;
+import 'package:connecting/helper/SchoolBloc.dart';
 
 class Helper {
   String _TOKEN = '';
@@ -146,144 +144,5 @@ class Helper {
       }
       return schools;
     });
-  }
-
-//
-//
-//
-//
-//
-//
-
-  static Widget _row(BuildContext context, School school) {
-    final _random = new Random();
-
-    List<Widget> data() {
-      List<Widget> widgets = List<Widget>();
-      if (school.is_roozane == true) {
-        widgets.add(const Icon(custicon.MyFlutterApp.sun));
-        widgets.add(SizedBox(
-          height: 3.0,
-        ));
-      } else if (school.is_roozane == false) {
-        widgets.add(const Icon(custicon.MyFlutterApp.moon));
-        widgets.add(SizedBox(
-          height: 3.0,
-        ));
-      }
-      if (school.jensiat == "b") {
-        widgets.add(const Icon(custicon.MyFlutterApp.male));
-      } else if (school.jensiat == "g") {
-        widgets.add(const Icon(custicon.MyFlutterApp.female));
-      } else {
-        widgets.add(const Icon(custicon.MyFlutterApp.female));
-
-        widgets.add(const Icon(custicon.MyFlutterApp.male));
-      }
-      return widgets;
-    }
-
-//
-//
-//
-    return Material(
-      child: InkWell(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewPage(school)));
-          },
-          onLongPress: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SecondPage(school)));
-          },
-          child: Container(
-              margin: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(7.0, 7.0),
-                        blurRadius: 2.0),
-                  ]),
-              child: Column(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 40.0,
-                    backgroundImage: NetworkImage(
-                        "http://moj-raj.ir/img/school-" +
-                            (1 + _random.nextInt(5)).toString() +
-                            ".jpg"),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Title(
-                      color: Colors.black,
-                      child: Text(
-                        school.name,
-                        style: TextStyle(fontSize: 20.0),
-                      )),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: data(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Container(child: Text(school.schoolable.toString())),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                ],
-              ))),
-    );
-  }
-
-//
-//
-//
-//
-//
-//
-  static FutureBuilder createRows() {
-    return FutureBuilder(
-        future: Helper.getSchools(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return new Text(Variable.ERROR[Variable.DISCONNECTED]);
-            case ConnectionState.waiting:
-              return new Center(child: CircularProgressIndicator());
-            case ConnectionState.active:
-              return new Text('');
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return new Text(
-                  Variable.ERROR[Variable.FAULT],
-                  style: TextStyle(fontSize: 24.0, color: Colors.black),
-                );
-              }
-              if (snapshot.data == null) {
-                return Container(child: Center(child: Text("Loading...")));
-              } else {
-//                return ScrollIndicator(
-//                    onLoadMore: onLoadMore,
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _row(context, snapshot.data[index]);
-                  },
-//                ),
-                );
-              }
-          }
-        });
   }
 }
